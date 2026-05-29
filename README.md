@@ -189,35 +189,4 @@ python tests/test_acceptance.py
 The suite mirrors the MVP acceptance table: ATE recovery, confounding correction,
 HTE direction, both repair paths, the VIF diagnostic, and the BP/robust-SE
 interaction.
-
----
-
-## Notes on the framework as written (changes made)
-
-While implementing the v2 spec, a few issues were corrected:
-
-1. **Model IDs.** The spec names `claude-sonnet-4` / `claude-haiku-4`. Those API
-   strings are retired or nonexistent. The code uses current IDs
-   (`claude-sonnet-4-6` for heavy nodes) and a local `llama3:8b` for light nodes,
-   both configurable in `config.py`.
-2. **State field.** The router/parsers referenced `latest_execution_error`, which
-   was not declared in `AgentState`. It is now an explicit field (the raw error),
-   distinct from `latest_parsed_error` (the structured diagnosis).
-3. **Repair counter.** `repair_attempts` uses an additive reducer, so the Repair
-   node returns `{"repair_attempts": 1}` per pass; the router escalates at
-   `>= MAX_REPAIR_ATTEMPTS`, giving exactly 3 repairs.
-4. **Breusch-Pagan vs LPM.** A Linear Probability Model is heteroskedastic by
-   construction; the correct fix is robust (HC) standard errors. The host BP test
-   therefore does not flag a fit that already uses an HC covariance, which is
-   exactly the remediation the error message recommends.
-5. **VIF on perfect collinearity.** An infinite VIF (the most severe case) now
-   triggers the diagnostic instead of being filtered out as non-finite.
-6. **Result type checks.** Numeric validation accepts numpy/int scalars, not only
-   Python `float`.
-7. **HITL prompt.** The runner prompts once per unclear variable and detects the
-   interrupt robustly across LangGraph versions (via the state snapshot).
-8. **Naive-bias band.** The spec cites a naive difference of `[0.09, 0.11]`, which
-   applied to the old continuous CTR. Under the v2 binary outcome the gap is
-   attenuated to ~0.057; the test asserts the direction of the bias rather than
-   the legacy magnitude.
 ```
