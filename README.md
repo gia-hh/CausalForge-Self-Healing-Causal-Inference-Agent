@@ -1,4 +1,4 @@
-# Automated Causal Inference Expert System (v2)
+# Automated Causal Inference Expert System
 
 A LangGraph state machine that plans a causal-inference design, generates and
 self-repairs statistical analysis code, **enforces statistical diagnostics on the
