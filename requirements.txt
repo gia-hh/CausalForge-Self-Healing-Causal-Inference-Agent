@@ -1,0 +1,30 @@
+# Automated Causal Inference Expert System v2 — pinned dependencies
+# Target interpreter: Python 3.10.11
+#
+# These versions are mutually compatible and all ship cp310 wheels, so a clean
+# `pip install -r requirements.txt` works on Python 3.10.11 without compiling.
+#
+# Notes
+# -----
+# * The framework names "claude-sonnet-4" / "claude-haiku-4"; those API strings
+#   are retired/nonexistent. config.py uses current IDs (claude-sonnet-4-6 for
+#   heavy nodes). The `anthropic` SDK below is only needed for LLM_BACKEND=real.
+# * Light nodes default to a local Ollama server (no Python package required;
+#   accessed over HTTP via the standard library).
+# * Mock mode (LLM_BACKEND=mock, the default) needs none of the LLM packages,
+#   only the scientific stack — but they are pinned here for a complete install.
+
+# ── Workflow orchestration ────────────────────────────────────────────────
+langgraph==0.2.76
+langgraph-checkpoint==2.1.2
+langchain-core==0.3.86
+
+# ── Scientific / statistical stack ────────────────────────────────────────
+numpy==1.26.4
+pandas==2.2.2
+scipy==1.13.1
+scikit-learn==1.4.2
+statsmodels==0.14.2
+
+# ── LLM backend (only required when LLM_BACKEND=real) ─────────────────────
+anthropic==0.40.0
